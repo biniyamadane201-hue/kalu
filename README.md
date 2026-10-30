@@ -1,0 +1,2 @@
+# kalu
+Amharic bible website 
