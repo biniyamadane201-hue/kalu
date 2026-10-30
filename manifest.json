@@ -1,0 +1,14 @@
+{
+  "name": "ቃሉ — የአማርኛ መጽሐፍ ቅዱስ",
+  "short_name": "ቃሉ",
+  "description": "መጽሐፍ ቅዱስን በአማርኛ በምቾት ያንብቡ።",
+  "lang": "am",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f5ed",
+  "theme_color": "#123b2a",
+  "icons": [
+    { "src": "assets/qalu-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

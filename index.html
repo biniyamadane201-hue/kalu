@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="am">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>ቃሉ | የአማርኛ መጽሐፍ ቅዱስ</title>
+    <meta
+      name="description"
+      content="ቃሉ — መጽሐፍ ቅዱስን በአማርኛ በምቾት ያንብቡ፣ ይፈልጉ፣ ያስቀምጡ።"
+    />
+    <meta name="theme-color" content="#123b2a" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="assets/qalu-icon.svg" type="image/svg+xml" />
+
+    <!-- Google Ethiopic Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@300;400;600;700&family=Noto+Serif+Ethiopic:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="premium.css" />
+  </head>
+  <body class="theme-light">
+    <!-- Top Reading Progress Indicator -->
+    <div id="scrollProgressBar" class="progress-bar"></div>
+
+    <!-- Mobile Drawer Backdrop Overlay -->
+    <div id="sidebarBackdrop" class="drawer-backdrop"></div>
+
+    <!-- Main Responsive Application Container -->
+    <div id="appContainer" class="app-layout">
+      <!-- 1. Books Drawer/Column -->
+      <aside id="colBooks" class="col-drawer col-books">
+        <div class="panel-header">
+          <div class="panel-header-top">
+            <h2><span class="side-heading-icon">✦</span> መጻሕፍት</h2>
+            <button id="closeBooksBtn" class="mobile-close-btn">&times;</button>
+          </div>
+          <input
+            type="text"
+            id="bookSearch"
+            placeholder="መጽሐፍ ፈልግ..."
+            autocomplete="off"
+          />
+        </div>
+        <ul id="bookList" class="scroll-list"></ul>
+      </aside>
+
+      <!-- 2. Chapters Drawer/Column -->
+      <aside id="colChapters" class="col-drawer col-chapters">
+        <div class="panel-header">
+          <div class="panel-header-top">
+            <h3>ምዕራፍ</h3>
+            <button id="closeChaptersBtn" class="mobile-close-btn">
+              &times;
+            </button>
+          </div>
+        </div>
+        <div id="chapterGrid" class="chapter-scroll-grid"></div>
+      </aside>
+
+      <!-- 3. Reading Pane -->
+      <main class="col-reader">
+        <!-- Qalu brand identity -->
+        <div class="brand-strip">
+          <div class="brand-mark" aria-hidden="true">ቃ</div>
+          <div class="brand-copy">
+            <strong>ቃሉ</strong>
+            <span>የአማርኛ መጽሐፍ ቅዱስ</span>
+          </div>
+          <div class="brand-promise">
+            <span class="brand-dot"></span> በሆነው ልክ ሳይሆን በፈቀደው ልክ እንወቀው
+          </div>
+          <button
+            id="aboutDeveloperBtn"
+            class="about-developer-btn"
+            type="button"
+          >
+            <span aria-hidden="true"><img src="bina.jpg" id="binaimg" /></span>
+            About Developer
+          </button>
+        </div>
+        <!-- Top Responsive App Bar -->
+        <header class="reader-header">
+          <div class="header-left">
+            <button
+              id="mobileMenuBtn"
+              class="tool-btn icon-btn"
+              title="መጻሕፍት ዝርዝር"
+            >
+              📚
+            </button>
+            <button
+              id="mobileChapBtn"
+              class="tool-btn icon-btn"
+              title="ምዕራፍ ዝርዝር"
+            >
+              📑
+            </button>
+            <button
+              id="zenToggleBtn"
+              class="tool-btn icon-btn desktop-only"
+              title="Zen Mode [Z]"
+            >
+              ☰
+            </button>
+
+            <div class="reading-meta">
+              <h1 id="activeBookTitle">---</h1>
+              <span id="activeChapterBadge" class="badge">ምዕራፍ 1</span>
+            </div>
+          </div>
+
+          <div class="header-center desktop-only">
+            <button
+              id="openSearchBtn"
+              class="search-trigger-btn"
+              title="በመጽሐፍ ቅዱስ ፈልግ [/]"
+            >
+              🔍 ጥቅስ ወይም ቃል ፈልግ... <kbd>/</kbd>
+            </button>
+          </div>
+
+          <div class="action-tools">
+            <button
+              id="mobileSearchBtn"
+              class="tool-btn icon-btn mobile-only"
+              title="ፈልግ"
+            >
+              🔍
+            </button>
+            <button
+              id="prevChapBtn"
+              class="tool-btn nav-btn"
+              title="ቀዳሚ ምዕራፍ [←]"
+            >
+              ‹
+            </button>
+            <button
+              id="nextChapBtn"
+              class="tool-btn nav-btn"
+              title="ቀጣይ ምዕራፍ [→]"
+            >
+              ›
+            </button>
+            <button
+              id="viewFavoritesBtn"
+              class="tool-btn icon-btn"
+              title="የተወደዱ"
+            >
+              ❤️
+            </button>
+            <button
+              id="openSettingsBtn"
+              class="tool-btn icon-btn"
+              title="ቅንብሮች"
+            >
+              ⚙️
+            </button>
+          </div>
+        </header>
+
+        <!-- Daily Verse Banner -->
+        <div id="dailyVerseCard" class="daily-card">
+          <div class="daily-meta">
+            <span class="daily-tag">ዕለታዊ ጥቅስ</span>
+            <span id="dailyRef" class="daily-ref"></span>
+            <button id="closeDailyBtn" class="close-card-btn">&times;</button>
+          </div>
+          <p id="dailyText" class="daily-text"></p>
+        </div>
+
+        <!-- Scripture Scroll Stage -->
+        <section class="scripture-container" id="scriptureContainer">
+          <article
+            class="scripture-pane width-medium layout-verse"
+            id="scriptureDisplay"
+          >
+            <p class="loading-msg">እየተጫነ ነው...</p>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <!-- Floating Verse Action Palette -->
+    <div id="versePopup" class="floating-palette">
+      <button class="palette-btn copy-btn" id="copyVerseBtn" title="ጥቅሱን ቅዳ">
+        📋 ቅዳ
+      </button>
+      <div class="color-dividers"></div>
+      <button class="hl-btn hl-yellow" data-hl="yellow" title="ቢጫ"></button>
+      <button class="hl-btn hl-green" data-hl="green" title="አረንጓዴ"></button>
+      <button class="hl-btn hl-blue" data-hl="blue" title="ሰማያዊ"></button>
+      <button class="hl-btn hl-pink" data-hl="pink" title="ሮዝ"></button>
+      <button class="palette-btn clear-hl" id="clearHlBtn" title="ቀለም አጥፋ">
+        ✕
+      </button>
+    </div>
+
+    <!-- Full-Text Search Modal -->
+    <div id="searchModal" class="modal-overlay">
+      <div class="modal-card search-card">
+        <div class="modal-header">
+          <input
+            type="text"
+            id="globalSearchInput"
+            placeholder="መላው መጽሐፍ ቅዱስ ውስጥ ፈልግ (ምሳሌ፦ ፍቅር፣ ብርሃን)..."
+          />
+          <button id="closeSearchBtn" class="close-btn">&times;</button>
+        </div>
+        <div id="searchMetaInfo" class="search-meta">ለመፈለግ ቃል ያስገቡ</div>
+        <div id="searchResultsList" class="search-results-list"></div>
+      </div>
+    </div>
+
+    <!-- Advanced Settings Modal -->
+    <div id="settingsModal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>የንባብና የገጽታ ቅንብሮች</h3>
+          <button id="closeSettingsBtn" class="close-btn">&times;</button>
+        </div>
+
+        <!-- Theme Mode (Dark / Light / Sepia) -->
+        <div class="setting-item">
+          <label>የገጽታ ቀለም (Theme)</label>
+          <div class="theme-buttons-row">
+            <button class="theme-btn active" data-theme="theme-dark">
+              🌙 ማታ (Dark)
+            </button>
+            <button class="theme-btn" data-theme="theme-light">
+              ☀️ ቀን (Light)
+            </button>
+            <button class="theme-btn" data-theme="theme-sepia">
+              📜 ወረቀት (Sepia)
+            </button>
+          </div>
+        </div>
+
+        <!-- Font Selector -->
+        <div class="setting-item">
+          <label>የፊደል ቅርጽ (Typography)</label>
+          <select id="fontSelect">
+            <option value="'Noto Sans Ethiopic', 'Nyala', sans-serif">
+              Noto Sans Ethiopic (ዘመናዊ)
+            </option>
+            <option value="'Noto Serif Ethiopic', serif">
+              Noto Serif Ethiopic (የመጽሐፍ ቅርጽ)
+            </option>
+            <option value="'Nyala', sans-serif">
+              Nyala (Standard Windows)
+            </option>
+            <option value="'Abyssinica SIL', serif">
+              Abyssinica SIL (ክላሲክ ግዕዝ)
+            </option>
+          </select>
+        </div>
+
+        <!-- Font Size & Line Height -->
+        <div class="setting-item-grid">
+          <div class="setting-item">
+            <label>መጠን: <span id="fontSizeVal">20px</span></label>
+            <input
+              type="range"
+              id="fontSizeRange"
+              min="15"
+              max="34"
+              value="20"
+            />
+          </div>
+          <div class="setting-item">
+            <label>ክፍተት: <span id="lineHeightVal">2.1</span></label>
+            <input
+              type="range"
+              id="lineHeightRange"
+              min="1.6"
+              max="2.8"
+              step="0.1"
+              value="2.1"
+            />
+          </div>
+        </div>
+
+        <!-- Reading Layout Style -->
+        <div class="setting-item">
+          <label>የንባብ አቀራረብ (Reading Layout)</label>
+          <div class="theme-buttons-row">
+            <button class="layout-btn active" data-layout="layout-verse">
+              በየጥቅሱ (Verses)
+            </button>
+            <button class="layout-btn" data-layout="layout-paragraph">
+              በተከታታይ አንቀጽ (Paragraph)
+            </button>
+          </div>
+        </div>
+
+        <!-- Column Width -->
+        <div class="setting-item">
+          <label>የንባብ ስፋት (Page Width)</label>
+          <div class="theme-buttons-row">
+            <button class="width-btn" data-width="width-narrow">
+              ጠባብ (650px)
+            </button>
+            <button class="width-btn active" data-width="width-medium">
+              መካከለኛ (850px)
+            </button>
+            <button class="width-btn" data-width="width-full">ሙሉ ስፋት</button>
+          </div>
+        </div>
+
+        <!-- Accent Color Picker -->
+        <div class="setting-item">
+          <label>የአነሳስ ቀለም (Accent Color)</label>
+          <div class="color-picker-row">
+            <button
+              class="color-dot active"
+              data-color="#58a6ff"
+              style="background: #58a6ff"
+            ></button>
+            <button
+              class="color-dot"
+              data-color="#2ea043"
+              style="background: #2ea043"
+            ></button>
+            <button
+              class="color-dot"
+              data-color="#a371f7"
+              style="background: #a371f7"
+            ></button>
+            <button
+              class="color-dot"
+              data-color="#d29922"
+              style="background: #d29922"
+            ></button>
+            <button
+              class="color-dot"
+              data-color="#f85149"
+              style="background: #f85149"
+            ></button>
+          </div>
+        </div>
+
+        <!-- Toggle Options -->
+        <div class="setting-item">
+          <label class="toggle-checkbox">
+            <input type="checkbox" id="showGeezPunctToggle" checked />
+            <span>የግዕዝ ሁለት ነጥብ (፡) ይታይ</span>
+          </label>
+          <label class="toggle-checkbox" style="margin-top: 8px">
+            <input type="checkbox" id="showVerseNumToggle" checked />
+            <span>የጥቅስ ቁጥሮች ይታዩ</span>
+          </label>
+        </div>
+
+        <!-- Data Backup & Reset -->
+        <div class="setting-item backup-section">
+          <label>መረጃ አያያዝ (Backup / Sync)</label>
+          <div class="theme-buttons-row">
+            <button id="exportDataBtn" class="sub-btn">📥 ቅጂ አውርድ</button>
+            <label class="sub-btn file-input-label">
+              📤 ቅጂ አስመጣ
+              <input
+                type="file"
+                id="importDataInput"
+                accept=".json"
+                style="display: none"
+              />
+            </label>
+            <button id="resetDataBtn" class="sub-btn danger-btn">🗑️ አጽዳ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Favorites Drawer Dialog -->
+    <div id="favoritesModal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>የተወደዱ ጥቅሶች (Favorites)</h3>
+          <button id="closeFavoritesBtn" class="close-btn">&times;</button>
+        </div>
+        <div id="favoritesList" class="favorites-content"></div>
+      </div>
+    </div>
+
+    <!-- About the Developer -->
+    <div
+      id="aboutDeveloperModal"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="aboutDeveloperTitle"
+    >
+      <div class="modal-card developer-card">
+        <div class="modal-header">
+          <h3 id="aboutDeveloperTitle">About the Developer</h3>
+          <button
+            id="closeAboutDeveloperBtn"
+            class="close-btn"
+            type="button"
+            aria-label="Close"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="developer-profile">
+          <div class="developer-avatar" aria-hidden="true">BA</div>
+          <div>
+            <p class="developer-eyebrow">THE CREATOR BEHIND ቃሉ (Qalu)</p>
+            <h2>Biniyam Adane</h2>
+            <p class="developer-role">
+              Computer Science Student · Web Developer
+            </p>
+          </div>
+        </div>
+        <div class="developer-message">
+          <p>
+            Hello! I'm <strong>Biniyam Adane</strong>, a second-year Computer
+            Science student at Wolayta Sodo University.
+          </p>
+          <p>
+            I enjoy turning ideas into useful, beautiful, and easy-to-use
+            digital experiences. I created <strong>ቃሉ (Qalu)</strong> to make
+            reading the Amharic Bible more comfortable, accessible, and
+            enjoyable on your desktop.
+          </p>
+
+          <p class="developer-quote">“serving my GOD by anymeans”</p>
+        </div>
+        <div class="developer-contact">
+          <span>Let's connect</span>
+          <a href="mailto:biniyamadane@gmail.com">✉️ biniyamadane@gmail.com</a>
+        </div>
+        <div class="developer-contact">
+          <span>Telegram</span>
+          <a href="t.me/@binon3rd">t.me/@binon3rd</a>
+        </div>
+        <p class="developer-credit">
+          Designed &amp; developed with care by Biniyam Adane · © 2026
+        </p>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="toast">ተቀድቷል!</div>
+
+    <script src="app.js"></script>
+    <script>
+      if ("serviceWorker" in navigator && location.protocol !== "file:") {
+        window.addEventListener("load", () =>
+          navigator.serviceWorker.register("service-worker.js").catch(() => {}),
+        );
+      }
+    </script>
+  </body>
+</html>
